@@ -1,26 +1,17 @@
+import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import Manager from '../models/Manager.js';
+import { User, UserRole } from '../models/User';
 
-/**
- * Generate JWT token
- * @param {string} id - Manager ID
- * @returns {string} JWT token
- */
-const generateToken = (id) => {
-    return jwt.sign({ id, role: 'manager' }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRE || '7d',
+const generateToken = (id: number) => {
+    return jwt.sign({ id, role: UserRole.MANAGER }, process.env.JWT_SECRET || 'KITH_Fleet_Secret', {
+        expiresIn: (process.env.JWT_EXPIRE || '7d') as any,
     });
 };
 
-/**
- * Register a new manager
- * @route POST /api/manager/register
- */
-export const register = async (req, res) => {
+export const register = async (req: Request, res: Response): Promise<any> => {
     try {
         const { name, email, password, phone } = req.body;
 
-        // Validate required fields
         if (!name || !email || !password) {
             return res.status(400).json({
                 status: 'error',
@@ -28,41 +19,33 @@ export const register = async (req, res) => {
             });
         }
 
-        // Check if manager already exists
-        const existingManager = await Manager.findOne({ email });
+        const existingManager = await User.findOne({ where: { email } });
         if (existingManager) {
             return res.status(400).json({
                 status: 'error',
-                message: 'Manager with this email already exists',
+                message: 'User with this email already exists',
             });
         }
 
-        // Create new manager
-        const manager = await Manager.create({
+        const manager = await User.create({
             name,
             email,
             password,
             phone,
+            role: UserRole.MANAGER
         });
 
-        // Generate token
-        const token = generateToken(manager._id);
+        const token = generateToken(manager.id);
 
         res.status(201).json({
             status: 'success',
             message: 'Manager registered successfully',
             data: {
-                manager: {
-                    id: manager._id,
-                    name: manager.name,
-                    email: manager.email,
-                    phone: manager.phone,
-                    role: manager.role,
-                },
+                manager: manager.toJSON(),
                 token,
             },
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Manager registration error:', error);
         res.status(500).json({
             status: 'error',
@@ -72,15 +55,10 @@ export const register = async (req, res) => {
     }
 };
 
-/**
- * Login manager
- * @route POST /api/manager/login
- */
-export const login = async (req, res) => {
+export const login = async (req: Request, res: Response): Promise<any> => {
     try {
         const { email, password } = req.body;
 
-        // Validate required fields
         if (!email || !password) {
             return res.status(400).json({
                 status: 'error',
@@ -88,8 +66,7 @@ export const login = async (req, res) => {
             });
         }
 
-        // Find manager and include password field
-        const manager = await Manager.findOne({ email }).select('+password');
+        const manager = await User.findOne({ where: { email, role: UserRole.MANAGER } });
         if (!manager) {
             return res.status(401).json({
                 status: 'error',
@@ -97,7 +74,6 @@ export const login = async (req, res) => {
             });
         }
 
-        // Check if manager is active
         if (!manager.isActive) {
             return res.status(403).json({
                 status: 'error',
@@ -105,7 +81,6 @@ export const login = async (req, res) => {
             });
         }
 
-        // Verify password
         const isPasswordValid = await manager.comparePassword(password);
         if (!isPasswordValid) {
             return res.status(401).json({
@@ -114,24 +89,17 @@ export const login = async (req, res) => {
             });
         }
 
-        // Generate token
-        const token = generateToken(manager._id);
+        const token = generateToken(manager.id);
 
         res.status(200).json({
             status: 'success',
             message: 'Login successful',
             data: {
-                manager: {
-                    id: manager._id,
-                    name: manager.name,
-                    email: manager.email,
-                    phone: manager.phone,
-                    role: manager.role,
-                },
+                manager: manager.toJSON(),
                 token,
             },
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Manager login error:', error);
         res.status(500).json({
             status: 'error',
@@ -141,15 +109,11 @@ export const login = async (req, res) => {
     }
 };
 
-/**
- * Get manager profile
- * @route GET /api/manager/profile
- */
-export const getProfile = async (req, res) => {
+export const getProfile = async (req: Request, res: Response): Promise<any> => {
     try {
-        const manager = await Manager.findById(req.user.id);
+        const manager = await User.findByPk(req.user.id);
 
-        if (!manager) {
+        if (!manager || manager.role !== UserRole.MANAGER) {
             return res.status(404).json({
                 status: 'error',
                 message: 'Manager not found',
@@ -159,18 +123,10 @@ export const getProfile = async (req, res) => {
         res.status(200).json({
             status: 'success',
             data: {
-                manager: {
-                    id: manager._id,
-                    name: manager.name,
-                    email: manager.email,
-                    phone: manager.phone,
-                    role: manager.role,
-                    isActive: manager.isActive,
-                    createdAt: manager.createdAt,
-                },
+                manager: manager.toJSON(),
             },
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Get manager profile error:', error);
         res.status(500).json({
             status: 'error',

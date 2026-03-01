@@ -1,26 +1,17 @@
+import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import Driver from '../models/Driver.js';
+import { User, UserRole } from '../models/User';
 
-/**
- * Generate JWT token
- * @param {string} id - Driver ID
- * @returns {string} JWT token
- */
-const generateToken = (id) => {
-    return jwt.sign({ id, role: 'driver' }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRE || '7d',
+const generateToken = (id: number) => {
+    return jwt.sign({ id, role: UserRole.DRIVER }, process.env.JWT_SECRET || 'KITH_Fleet_Secret', {
+        expiresIn: (process.env.JWT_EXPIRE || '7d') as any,
     });
 };
 
-/**
- * Register a new driver
- * @route POST /api/driver/register
- */
-export const register = async (req, res) => {
+export const register = async (req: Request, res: Response): Promise<any> => {
     try {
         const { name, email, password, phone, licenseNumber } = req.body;
 
-        // Validate required fields
         if (!name || !email || !password) {
             return res.status(400).json({
                 status: 'error',
@@ -28,43 +19,34 @@ export const register = async (req, res) => {
             });
         }
 
-        // Check if driver already exists
-        const existingDriver = await Driver.findOne({ email });
+        const existingDriver = await User.findOne({ where: { email } });
         if (existingDriver) {
             return res.status(400).json({
                 status: 'error',
-                message: 'Driver with this email already exists',
+                message: 'User with this email already exists',
             });
         }
 
-        // Create new driver
-        const driver = await Driver.create({
+        const driver = await User.create({
             name,
             email,
             password,
             phone,
             licenseNumber,
+            role: UserRole.DRIVER
         });
 
-        // Generate token
-        const token = generateToken(driver._id);
+        const token = generateToken(driver.id);
 
         res.status(201).json({
             status: 'success',
             message: 'Driver registered successfully',
             data: {
-                driver: {
-                    id: driver._id,
-                    name: driver.name,
-                    email: driver.email,
-                    phone: driver.phone,
-                    licenseNumber: driver.licenseNumber,
-                    role: driver.role,
-                },
+                driver: driver.toJSON(),
                 token,
             },
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Driver registration error:', error);
         res.status(500).json({
             status: 'error',
@@ -74,15 +56,10 @@ export const register = async (req, res) => {
     }
 };
 
-/**
- * Login driver
- * @route POST /api/driver/login
- */
-export const login = async (req, res) => {
+export const login = async (req: Request, res: Response): Promise<any> => {
     try {
         const { email, password } = req.body;
 
-        // Validate required fields
         if (!email || !password) {
             return res.status(400).json({
                 status: 'error',
@@ -90,8 +67,7 @@ export const login = async (req, res) => {
             });
         }
 
-        // Find driver and include password field
-        const driver = await Driver.findOne({ email }).select('+password');
+        const driver = await User.findOne({ where: { email, role: UserRole.DRIVER } });
         if (!driver) {
             return res.status(401).json({
                 status: 'error',
@@ -99,7 +75,6 @@ export const login = async (req, res) => {
             });
         }
 
-        // Check if driver is active
         if (!driver.isActive) {
             return res.status(403).json({
                 status: 'error',
@@ -107,7 +82,6 @@ export const login = async (req, res) => {
             });
         }
 
-        // Verify password
         const isPasswordValid = await driver.comparePassword(password);
         if (!isPasswordValid) {
             return res.status(401).json({
@@ -116,25 +90,17 @@ export const login = async (req, res) => {
             });
         }
 
-        // Generate token
-        const token = generateToken(driver._id);
+        const token = generateToken(driver.id);
 
         res.status(200).json({
             status: 'success',
             message: 'Login successful',
             data: {
-                driver: {
-                    id: driver._id,
-                    name: driver.name,
-                    email: driver.email,
-                    phone: driver.phone,
-                    licenseNumber: driver.licenseNumber,
-                    role: driver.role,
-                },
+                driver: driver.toJSON(),
                 token,
             },
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Driver login error:', error);
         res.status(500).json({
             status: 'error',
@@ -144,15 +110,11 @@ export const login = async (req, res) => {
     }
 };
 
-/**
- * Get driver profile
- * @route GET /api/driver/profile
- */
-export const getProfile = async (req, res) => {
+export const getProfile = async (req: Request, res: Response): Promise<any> => {
     try {
-        const driver = await Driver.findById(req.user.id);
+        const driver = await User.findByPk(req.user.id);
 
-        if (!driver) {
+        if (!driver || driver.role !== UserRole.DRIVER) {
             return res.status(404).json({
                 status: 'error',
                 message: 'Driver not found',
@@ -162,19 +124,10 @@ export const getProfile = async (req, res) => {
         res.status(200).json({
             status: 'success',
             data: {
-                driver: {
-                    id: driver._id,
-                    name: driver.name,
-                    email: driver.email,
-                    phone: driver.phone,
-                    licenseNumber: driver.licenseNumber,
-                    role: driver.role,
-                    isActive: driver.isActive,
-                    createdAt: driver.createdAt,
-                },
+                driver: driver.toJSON(),
             },
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Get driver profile error:', error);
         res.status(500).json({
             status: 'error',
