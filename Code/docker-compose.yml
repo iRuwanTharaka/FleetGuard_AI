@@ -1,0 +1,21 @@
+# PostgreSQL 15 for FleetGuard AI (backend connects via localhost:5432)
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: fleetguard-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - fleetguard_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  fleetguard_pgdata: {}
