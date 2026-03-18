@@ -1,0 +1,321 @@
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --font-size: 16px;
+  --background: #ffffff;
+  --foreground: #0a1929;
+  --card: #ffffff;
+  --card-foreground: #0a1929;
+  --popover: #ffffff;
+  --popover-foreground: #0a1929;
+  --primary: #0d47a1;
+  --primary-foreground: #ffffff;
+  --secondary: #e3f2fd;
+  --secondary-foreground: #0d47a1;
+  --muted: #f5f5f5;
+  --muted-foreground: #546e7a;
+  --accent: #e3f2fd;
+  --accent-foreground: #0d47a1;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: rgba(13, 71, 161, 0.15);
+  --input: transparent;
+  --input-background: #f8fafc;
+  --switch-background: #cbd5e1;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: #1976d2;
+  --chart-1: #0d47a1;
+  --chart-2: #1976d2;
+  --chart-3: #2196f3;
+  --chart-4: #64b5f6;
+  --chart-5: #bbdefb;
+  --radius: 0.75rem;
+  --sidebar: #0a1929;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #2196f3;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1565c0;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #2196f3;
+  
+  /* FleetGuard AI Custom Colors - Dark Blue Theme */
+  --ocean-blue: #0d47a1;
+  --sunset-orange: #f97316;
+  --palm-green: #10b981;
+  --golden-sand: #fbbf24;
+  --deep-navy: #0a1929;
+  --cloud-white: #FFFFFF;
+  --sky-blue: #2196f3;
+  --coral-red: #dc2626;
+  --royal-blue: #1565c0;
+  --azure: #42a5f5;
+  --cyan: #00bcd4;
+  
+  /* Blue-Green Professional Palette */
+  --forest-green: #1b5e20;
+  --emerald: #2e7d32;
+  --jade: #388e3c;
+  --leaf-green: #4caf50;
+  --teal: #00695c;
+  --sea-green: #00796b;
+  --mint: #00897b;
+  --blue-green: #0097a7;
+  --deep-teal: #006064;
+}
+
+.dark {
+  --background: #0a1929;
+  --foreground: #e3f2fd;
+  --card: #132f4c;
+  --card-foreground: #e3f2fd;
+  --popover: #132f4c;
+  --popover-foreground: #e3f2fd;
+  --primary: #2196f3;
+  --primary-foreground: #0a1929;
+  --secondary: #1565c0;
+  --secondary-foreground: #e3f2fd;
+  --muted: #1e3a5f;
+  --muted-foreground: #90caf9;
+  --accent: #1976d2;
+  --accent-foreground: #e3f2fd;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: rgba(33, 150, 243, 0.2);
+  --input: rgba(33, 150, 243, 0.1);
+  --ring: #2196f3;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --chart-1: #2196f3;
+  --chart-2: #42a5f5;
+  --chart-3: #64b5f6;
+  --chart-4: #90caf9;
+  --chart-5: #bbdefb;
+  --sidebar: #0a1929;
+  --sidebar-foreground: #e3f2fd;
+  --sidebar-primary: #2196f3;
+  --sidebar-primary-foreground: #0a1929;
+  --sidebar-accent: #1565c0;
+  --sidebar-accent-foreground: #e3f2fd;
+  --sidebar-border: rgba(33, 150, 243, 0.2);
+  --sidebar-ring: #2196f3;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-switch-background: var(--switch-background);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /**
+  * Default typography styles for HTML elements (h1-h4, p, label, button, input).
+  * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
+  */
+
+  html {
+    font-size: var(--font-size);
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+    color: var(--foreground);
+  }
+
+  h2 {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+    color: var(--foreground);
+  }
+
+  h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+    color: var(--foreground);
+  }
+
+  h4 {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+    color: var(--foreground);
+  }
+
+  p {
+    color: var(--foreground);
+  }
+
+  label {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+    color: var(--foreground);
+  }
+
+  button {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  input {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+    color: var(--foreground);
+  }
+
+  input::placeholder {
+    color: var(--muted-foreground);
+    opacity: 0.7;
+  }
+
+  textarea {
+    color: var(--foreground);
+  }
+
+  textarea::placeholder {
+    color: var(--muted-foreground);
+    opacity: 0.7;
+  }
+
+  select {
+    color: var(--foreground);
+  }
+}
+
+/* FleetGuard AI Professional Animations */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slow-zoom {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(33, 150, 243, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(33, 150, 243, 0.6);
+  }
+}
+
+@layer utilities {
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+  }
+  
+  .animate-slow-zoom {
+    animation: slow-zoom 20s ease-in-out infinite;
+  }
+  
+  .animate-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    background-size: 1000px 100%;
+    animation: shimmer 3s infinite;
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite;
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .glass-card-hover {
+    transition: all 0.3s ease;
+  }
+  
+  .glass-card-hover:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+}
