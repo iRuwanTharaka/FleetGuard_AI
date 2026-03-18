@@ -1,4 +1,12 @@
 /**
+ * @module     Testing Related
+ * @author     Iruwan Tharaka <iruwantharaka2001@gmail.com>
+ * @description This file is part of the test suite of FleetGuard AI.
+ *              Developed and maintained by Iruwan Tharaka.
+ * @date       2026-02-20
+ */
+
+/**
  * FleetGuard API Test Runner
  * Run: node tests/run-api-tests.js
  * Requires: backend running on http://localhost:3001

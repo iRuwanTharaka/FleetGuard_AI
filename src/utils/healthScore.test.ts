@@ -1,3 +1,11 @@
+/**
+ * @module     Testing Related
+ * @author     Iruwan Tharaka <iruwantharaka2001@gmail.com>
+ * @description This file is part of the test suite of FleetGuard AI.
+ *              Developed and maintained by Iruwan Tharaka.
+ * @date       2026-02-18
+ */
+
 import { describe, it, expect } from 'vitest';
 import { healthColor, healthLabel, healthFromDamages } from './healthScore';
 

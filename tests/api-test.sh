@@ -1,4 +1,9 @@
 #!/bin/bash
+# @module     Testing Related
+# @author     Iruwan Tharaka <iruwantharaka2001@gmail.com>
+# @description This file is part of the test suite of FleetGuard AI.
+# @date       2026-02-22
+
 # FleetGuard API Test Script - Run with backend running on localhost:3001
 BASE="http://localhost:3001/api"
 
