@@ -1,44 +1,83 @@
-# Fleet guard
+# FleetGuard AI
 
-**Company:** KITH travels
+AI-powered vehicle inspection and fleet management for Sri Lankan travel agencies.
 
-## Project Overview
-Fleet guard is a comprehensive fleet management system designed to streamline the operations of drivers, vehicles, and managers. 
+## Running the project
 
-This repository contains the source code and documentation for the project.
+### 1. Install dependencies
 
-## Repository Structure
+```bash
+npm i
+cd backend && npm i
+```
 
-- `Code/backend/`: Contains the Node.js/Express/TypeScript API backend.
-- `Doc/`: Contains project documentation, including the [Backend API Documentation](Doc/Backend_API_Documentation.md).
+### 2. PostgreSQL (local)
 
-## Getting Started (Backend)
+Install PostgreSQL 15+ and ensure it's running:
 
-### Prerequisites
-- Node.js (v18 or higher recommended)
-- PostgreSQL database
-- npm or yarn
+- **Windows:** [PostgreSQL installer](https://www.postgresql.org/download/windows/)
+- **macOS:** `brew install postgresql@15` then `brew services start postgresql@15`
+- **Linux:** `sudo apt install postgresql postgresql-contrib` (or equivalent)
 
-### Installation
-1. Navigate to the backend directory:
-   ```bash
-   cd Code/backend
-   ```
-2. Install the dependencies:
-   ```bash
-   npm install
-   ```
+### 3. Database setup
 
-### Configuration
-1. Create a `.env` file in the `Code/backend` directory.
-2. Add the necessary environment variables as defined in the [Backend Documentation](Doc/Backend_API_Documentation.md#environment-variables-needed) (e.g., `POSTGRES_URI`, `JWT_SECRET`, `PORT`).
+Create `backend/.env` with your PostgreSQL credentials (or `DATABASE_URL` for Neon), then:
 
-### Running the Server
-To start the backend server in development mode with hot-reloading:
+```bash
+cd backend
+npm run db:init
+npm run db:sprint5
+npm run db:seed
+```
+
+### 3b. Demo data (optional)
+
+To fill the app with realistic demo data (vehicles with photos & GPS, inspections, damage detections, smart assignment, manager reviews). Run after DB setup and migrations (`db:init` and `npm run db:migrate`, or `db:init` + `db:sprint5` + `db:sprint6`):
+
+```bash
+cd backend
+npm run demo
+```
+
+This downloads real car/interior/damage images into `backend/uploads/demo/` and seeds users, vehicles, inspections, damage records, and notifications. You can then log in as:
+
+| Role    | Email                         | Password  |
+|---------|-------------------------------|-----------|
+| Driver  | driver1@demo.fleetguard.com   | Demo123!  |
+| Manager | manager1@demo.fleetguard.com  | Demo123!  |
+| Admin   | admin@demo.fleetguard.com     | Demo123!  |
+
+(Same password for driver2, driver3, manager2.)
+
+### 4. Start backend
+
+```bash
+cd backend
+npm run dev
+```
+
+Backend runs at http://localhost:3001
+
+### 5. Start frontend
+
 ```bash
 npm run dev
 ```
-The server will start on the port specified in your `.env` file, or port 5000 by default.
 
-## Documentation
-For more detailed information regarding the API endpoints, architecture, and security, please refer to the documents in the `Doc/` directory.
+Frontend runs at http://localhost:5173
+
+---
+
+## API keys
+
+| Key | Where | Purpose |
+|-----|-------|---------|
+| **VITE_GOOGLE_MAPS_API_KEY** | Root `.env` | Map View + Smart Assignment address geocoding. Enable **Maps JavaScript API** and **Geocoding API** in [Google Cloud Console](https://console.cloud.google.com). |
+| **GOOGLE_CLIENT_ID** | `backend/.env` | Google Sign-In (optional). Create OAuth 2.0 credentials in Google Cloud Console. |
+| **GOOGLE_CLIENT_SECRET** | `backend/.env` | Google Sign-In (optional). Same OAuth credentials. |
+| **VITE_GOOGLE_CLIENT_ID** | Root `.env` | Google Sign-In on frontend (optional). Same as GOOGLE_CLIENT_ID. |
+| **JWT_SECRET** | `backend/.env` | Auth tokens. Use any long random string. |
+| **EMAIL_USER** / **EMAIL_PASS** | `backend/.env` | Password reset emails (optional). Use Gmail App Password. |
+
+**Minimum to run:** PostgreSQL + `JWT_SECRET` in `backend/.env`.  
+**For Map View + Smart Assignment:** Add `VITE_GOOGLE_MAPS_API_KEY` to root `.env`.
