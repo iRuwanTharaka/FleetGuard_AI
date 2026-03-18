@@ -1,10 +1,9 @@
 /**
  * @module     Client Portal (Driver-Facing Interface)
  * @author     Yuraj Malinda <yurajmalinda123@gmail.com>
- * @role       Client Portal Developer
  * @description This file is part of the Client (Driver) Portal of FleetGuard AI.
  *              All pages and components in this section were developed by Yuraj Malinda.
- * @date       2026-03-19
+ * @date       2026-03-09
  */
 
 import { useState } from 'react';
@@ -30,7 +29,7 @@ export function InspectionResults() {
   const navigate = useNavigate();
   const { inspection } = useInspection();
   const [expandedDamage, setExpandedDamage] = useState<string | null>(null);
-  const [selectedPhoto, setSelectedPhoto] = useState<{ preview: string; damages: any[] } | null>(null);
+  const [selectedPhoto, setSelectedPhoto] = useState<{ preview: string; damages: any[]; label?: string; [key: string]: unknown } | null>(null);
 
   const handleContinue = () => {
     navigate('/driver/inspection/signatures');
@@ -62,16 +61,16 @@ export function InspectionResults() {
     );
   };
 
-  const getDamageIcon = (type: string) => {
+  const getDamageIcon = (_type: string) => {
     return '⚠️';
   };
 
   const healthScore = inspection.healthScore || 0;
   const scoreData = getHealthScoreColor(healthScore);
   const severityCounts = {
-    minor: inspection.damages.filter((d) => d.severity === 'minor').length,
-    moderate: inspection.damages.filter((d) => d.severity === 'moderate').length,
-    major: inspection.damages.filter((d) => d.severity === 'major').length,
+    minor: inspection.damages.filter((d: any) => d.severity === 'minor').length,
+    moderate: inspection.damages.filter((d: any) => d.severity === 'moderate').length,
+    major: inspection.damages.filter((d: any) => d.severity === 'major').length,
   };
 
   // Map photo_type to photo id for damage linking (backend returns photo_type)
@@ -81,13 +80,13 @@ export function InspectionResults() {
   };
 
   const photosWithDamages = inspection.photos
-    .filter((p) => p.captured)
-    .map((photo) => {
+    .filter((p: any) => p.captured)
+    .map((photo: any) => {
       const photoIndex = parseInt(photo.id, 10) - 1; // 1-based id → 0-based index
-      const annotated = inspection.annotatedImages?.find((a) => a.photo_index === photoIndex);
+      const annotated = inspection.annotatedImages?.find((a: any) => a.photo_index === photoIndex);
       return {
         ...photo,
-        damages: inspection.damages.filter((d) => d.photoId === photo.id),
+        damages: inspection.damages.filter((d: any) => d.photoId === photo.id),
         annotatedPreview: annotated?.image_b64
           ? `data:image/jpeg;base64,${annotated.image_b64}`
           : null,
@@ -230,7 +229,7 @@ export function InspectionResults() {
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">AI Analysis Photos</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {photosWithDamages.map((photo) => (
+            {photosWithDamages.map((photo: any) => (
               <Card
                 key={photo.id}
                 className="relative overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
@@ -263,9 +262,9 @@ export function InspectionResults() {
           <div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Detailed Damage Report</h3>
             <div className="space-y-3">
-              {inspection.damages.map((damage) => {
+              {inspection.damages.map((damage: any) => {
                 const isExpanded = expandedDamage === damage.id;
-                const photo = inspection.photos.find((p) => p.id === damage.photoId);
+                const photo = inspection.photos.find((p: any) => p.id === damage.photoId);
                 
                 return (
                   <Card key={damage.id} className="overflow-hidden bg-white dark:bg-gray-800">
@@ -298,10 +297,10 @@ export function InspectionResults() {
                     
                     {isExpanded && (
                       <div className="px-4 pb-4 pt-2 border-t border-gray-200 dark:border-gray-700">
-                        {(photo?.preview || photosWithDamages.find((p) => p.id === photo?.id)?.annotatedPreview) && (
+                        {(photo?.preview || photosWithDamages.find((p: any) => p.id === photo?.id)?.annotatedPreview) && (
                           <div className="mb-3">
                             <img
-                              src={photosWithDamages.find((p) => p.id === photo?.id)?.annotatedPreview || photo?.preview}
+                              src={photosWithDamages.find((p: any) => p.id === photo?.id)?.annotatedPreview || photo?.preview}
                               alt="Damage detail"
                               className="w-full h-48 object-cover rounded-lg"
                             />
