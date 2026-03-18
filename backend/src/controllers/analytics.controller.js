@@ -1,3 +1,11 @@
+/**
+ * @module     Admin Backend
+ * @author     Kalindu Tharanga <kalindu.th@gmail.com>
+ * @description This file is part of the Admin Backend of FleetGuard AI.
+ *              All dashboard and manager views satisfy the Admin Portal.
+ * @date       2026-02-21
+ */
+
 const pool = require('../config/database');
 
 // GET /api/manager/analytics/health-trend?days=30

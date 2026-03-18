@@ -1,3 +1,11 @@
+/**
+ * @module     Admin Backend
+ * @author     Kalindu Tharanga <kalindu.th@gmail.com>
+ * @description This file is part of the Admin Backend of FleetGuard AI.
+ *              All dashboard and manager views satisfy the Admin Portal.
+ * @date       2026-03-11
+ */
+
 const { db } = require('./index');
 
 async function findAll({ status, search, page = 1, limit = 20 }) {
