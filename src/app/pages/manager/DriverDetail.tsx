@@ -1,4 +1,13 @@
+/**
+ * @module     Admin Frontend
+ * @author     Bethmi Jayamila <bethmij@gmail.com>
+ * @description This file is part of the Admin/Manager Frontend of FleetGuard AI.
+ *              All dashboard and manager pages are developed by Bethmi Jayamila.
+ * @date       2026-03-04
+ */
+
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/app/components/ui/button';
 import { ArrowLeft, Edit, Phone, Mail, MapPin, Calendar, Star, Car, TrendingUp, Award, AlertCircle, CheckCircle } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
@@ -9,6 +18,7 @@ import { SkeletonLoader } from '@/app/components/common/SkeletonLoader';
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 export function DriverDetail() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { driverId } = useParams();
   const [driverData, setDriverData] = useState<any>(null);
@@ -63,9 +73,9 @@ export function DriverDetail() {
       <div className="space-y-6 pb-6">
         <Button variant="outline" onClick={() => navigate('/manager/drivers')}>
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Drivers
+          {t('driverDetail.backToDrivers')}
         </Button>
-        <p className="text-slate-600 dark:text-slate-400">Driver not found.</p>
+        <p className="text-slate-600 dark:text-slate-400">{t('driverDetail.notFound')}</p>
       </div>
     );
   }
@@ -79,7 +89,7 @@ export function DriverDetail() {
         className="border-slate-300/50 dark:border-white/10 text-slate-900 dark:text-white"
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
-        Back to Drivers
+        {t('driverDetail.backToDrivers')}
       </Button>
 
       {/* Driver Profile Header */}
@@ -129,13 +139,13 @@ export function DriverDetail() {
                     </div>
                     <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
                       <Calendar className="h-4 w-4" />
-                      <span>Joined {driver.joinDate}</span>
+                      <span>{t('driverDetail.joined')} {driver.joinDate}</span>
                     </div>
                   </div>
                 </div>
                 <Button className="bg-blue-600 hover:bg-blue-700">
                   <Edit className="h-4 w-4 mr-2" />
-                  Edit Driver
+                  {t('driverDetail.editDriver')}
                 </Button>
               </div>
 
@@ -143,7 +153,7 @@ export function DriverDetail() {
               <div className="mt-6 p-4 rounded-xl bg-slate-200/30 dark:bg-white/5 border border-slate-300/50 dark:border-white/10">
                 <div className="flex items-center gap-2 mb-2">
                   <Car className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                  <span className="text-sm text-slate-600 dark:text-slate-400">Current Vehicle</span>
+                  <span className="text-sm text-slate-600 dark:text-slate-400">{t('driverDetail.currentVehicle')}</span>
                 </div>
                 <p className="font-bold text-slate-900 dark:text-white">{driver.vehicle}</p>
               </div>
@@ -154,22 +164,22 @@ export function DriverDetail() {
 
       {/* Statistics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <StatCard title="Completed Trips" value={driver.stats.completedTrips} icon={<CheckCircle className="h-5 w-5" />} color="green" />
-        <StatCard title="Average Rating" value={driver.stats.avgRating} icon={<Star className="h-5 w-5" />} color="yellow" />
-        <StatCard title="On-Time %" value={`${driver.stats.onTimePercentage}%`} icon={<TrendingUp className="h-5 w-5" />} color="blue" />
-        <StatCard title="Total Distance" value={driver.stats.totalDistance} icon={<MapPin className="h-5 w-5" />} color="purple" />
-        <StatCard title="Total Earnings" value={driver.stats.earnings} icon={<Award className="h-5 w-5" />} color="green" />
-        <StatCard title="Canceled Trips" value={driver.stats.canceledTrips} icon={<AlertCircle className="h-5 w-5" />} color="red" />
+        <StatCard title={t('driverDetail.completedTrips')} value={driver.stats.completedTrips} icon={<CheckCircle className="h-5 w-5" />} color="green" />
+        <StatCard title={t('driverDetail.avgRating')} value={driver.stats.avgRating} icon={<Star className="h-5 w-5" />} color="yellow" />
+        <StatCard title={t('driverDetail.onTime')} value={`${driver.stats.onTimePercentage}%`} icon={<TrendingUp className="h-5 w-5" />} color="blue" />
+        <StatCard title={t('driverDetail.totalDistance')} value={driver.stats.totalDistance} icon={<MapPin className="h-5 w-5" />} color="purple" />
+        <StatCard title={t('driverDetail.totalEarnings')} value={driver.stats.earnings} icon={<Award className="h-5 w-5" />} color="green" />
+        <StatCard title={t('driverDetail.canceledTrips')} value={driver.stats.canceledTrips} icon={<AlertCircle className="h-5 w-5" />} color="red" />
       </div>
 
       {/* License Information */}
       <div className="relative rounded-2xl overflow-hidden">
         <div className="absolute inset-0 bg-white/60 dark:bg-white/5 backdrop-blur-md border border-slate-300/50 dark:border-white/10"></div>
         <div className="relative p-6">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6">License Information</h2>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6">{t('driverDetail.licenseInfo')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <InfoRow label="License Number" value={driver.licenseNumber} />
-            <InfoRow label="License Expiry" value={driver.licenseExpiry} />
+            <InfoRow label={t('driverDetail.licenseNumber')} value={driver.licenseNumber} />
+            <InfoRow label={t('driverDetail.licenseExpiry')} value={driver.licenseExpiry} />
           </div>
         </div>
       </div>
@@ -178,7 +188,7 @@ export function DriverDetail() {
       <div className="relative rounded-2xl overflow-hidden">
         <div className="absolute inset-0 bg-white/60 dark:bg-white/5 backdrop-blur-md border border-slate-300/50 dark:border-white/10"></div>
         <div className="relative p-6">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Recent Trips</h2>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6">{t('driverDetail.recentTrips')}</h2>
           <div className="space-y-3">
             {driver.recentTrips.map((trip) => (
               <TripCard key={trip.id} trip={trip} />
@@ -225,6 +235,7 @@ function InfoRow({ label, value }: any) {
 }
 
 function TripCard({ trip }: any) {
+  const { t } = useTranslation();
   return (
     <div className="p-4 rounded-xl bg-slate-200/30 dark:bg-white/5 border border-slate-300/50 dark:border-white/10">
       <div className="flex items-start justify-between mb-3">
@@ -242,7 +253,7 @@ function TripCard({ trip }: any) {
       </div>
       <div className="space-y-2">
         <div className="flex items-center gap-2 text-sm">
-          <span className="text-slate-600 dark:text-slate-400">Customer:</span>
+          <span className="text-slate-600 dark:text-slate-400">{t('driverDetail.customer')}:</span>
           <span className="text-slate-900 dark:text-white">{trip.customer}</span>
         </div>
         <div className="flex items-center gap-2 text-sm">

@@ -1,5 +1,14 @@
+/**
+ * @module     Admin Frontend
+ * @author     Bethmi Jayamila <bethmij@gmail.com>
+ * @description This file is part of the Admin/Manager Frontend of FleetGuard AI.
+ *              All dashboard and manager pages are developed by Bethmi Jayamila.
+ * @date       2026-02-26
+ */
+
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/app/components/ui/button';
 import { 
   ArrowLeft, 
@@ -20,6 +29,7 @@ import { timeAgo } from '@/utils/time';
 const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1758179128122-6079c9cb3e4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080';
 
 export function VehicleDetails() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
@@ -82,15 +92,15 @@ export function VehicleDetails() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-slate-400">Loading vehicle...</p>
+        <p className="text-slate-400">{t('vehicleDetails.loading')}</p>
       </div>
     );
   }
   if (!vehicle) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-        <p className="text-slate-400">Vehicle not found.</p>
-        <Button variant="outline" onClick={() => navigate('/manager/fleet')}>Back to fleet</Button>
+        <p className="text-slate-400">{t('vehicleDetails.notFound')}</p>
+        <Button variant="outline" onClick={() => navigate('/manager/fleet')}>{t('vehicleDetails.backToFleet')}</Button>
       </div>
     );
   }
@@ -119,7 +129,7 @@ export function VehicleDetails() {
             className="bg-blue-600 hover:bg-blue-700"
           >
             <Edit className="h-4 w-4 mr-2" />
-            Edit
+            {t('vehicleDetails.edit')}
           </Button>
           <Button variant="outline" size="icon" className="border-white/10 text-white">
             <MoreVertical className="h-4 w-4" />
@@ -142,7 +152,7 @@ export function VehicleDetails() {
 
           {/* Health Trend Chart */}
           {healthTrend.length > 0 && (
-            <GlassCard title="Health Trend">
+            <GlassCard title={t('vehicleDetails.healthTrend')}>
               <div className="h-48">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={healthTrend}>
@@ -157,23 +167,23 @@ export function VehicleDetails() {
           )}
 
           {/* Vehicle Information */}
-          <GlassCard title="Vehicle Information">
+          <GlassCard title={t('vehicleDetails.information')}>
             <div className="grid grid-cols-2 gap-6">
-              <InfoItem label="Vehicle Number" value={vehicle.id} />
-              <InfoItem label="Make" value={vehicle.make} />
-              <InfoItem label="Model" value={vehicle.model} />
-              <InfoItem label="Year" value={vehicle.year} />
-              <InfoItem label="Type" value={vehicle.type} />
-              <InfoItem label="Color" value={vehicle.color} />
-              <InfoItem label="License Plate" value={vehicle.license} />
-              <InfoItem label="VIN" value={vehicle.vin} />
-              <InfoItem label="Mileage" value={vehicle.mileage} />
-              <InfoItem label="Purchase Date" value={vehicle.purchaseDate} />
+              <InfoItem label={t('vehicleDetails.id')} value={vehicle.id} />
+              <InfoItem label={t('vehicleDetails.make')} value={vehicle.make} />
+              <InfoItem label={t('vehicleDetails.model')} value={vehicle.model} />
+              <InfoItem label={t('vehicleDetails.year')} value={vehicle.year} />
+              <InfoItem label={t('vehicleDetails.type')} value={vehicle.type} />
+              <InfoItem label={t('vehicleDetails.color')} value={vehicle.color} />
+              <InfoItem label={t('vehicleDetails.license')} value={vehicle.license} />
+              <InfoItem label={t('vehicleDetails.vin')} value={vehicle.vin} />
+              <InfoItem label={t('vehicleDetails.mileage')} value={vehicle.mileage} />
+              <InfoItem label={t('vehicleDetails.purchaseDate')} value={vehicle.purchaseDate} />
             </div>
           </GlassCard>
 
           {/* Inspection History */}
-          <GlassCard title="Inspection History">
+          <GlassCard title={t('vehicleDetails.inspectionHistory')}>
             <div className="space-y-3">
               {inspections.map((inspection) => (
                 <div
@@ -188,18 +198,18 @@ export function VehicleDetails() {
                   <div className="flex items-center gap-4">
                     <div className="text-right">
                       <p className="text-lg font-bold text-green-400">{inspection.health}</p>
-                      <p className="text-xs text-slate-500">Health</p>
+                      <p className="text-xs text-slate-500">{t('vehicleDetails.health')}</p>
                     </div>
                     <div className="text-right">
                       <p className="text-lg font-bold text-orange-400">{inspection.damages}</p>
-                      <p className="text-xs text-slate-500">Damages</p>
+                      <p className="text-xs text-slate-500">{t('vehicleDetails.damages')}</p>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
             <Button variant="ghost" className="w-full mt-4 text-blue-400">
-              View All Inspections
+              {t('vehicleDetails.viewAllInspections')}
             </Button>
           </GlassCard>
         </div>
@@ -210,9 +220,9 @@ export function VehicleDetails() {
           <GlassCard>
             <div className="text-center">
               <Activity className="h-12 w-12 text-green-400 mx-auto mb-4" />
-              <p className="text-slate-400 text-sm mb-2">Health Score</p>
+              <p className="text-slate-400 text-sm mb-2">{t('vehicleDetails.healthScore')}</p>
               <p className="text-5xl font-bold text-green-400 mb-2">{vehicle.health}</p>
-              <p className="text-slate-500 text-sm">Excellent Condition</p>
+              <p className="text-slate-500 text-sm">{t('vehicleDetails.excellentCondition')}</p>
             </div>
           </GlassCard>
 
@@ -220,7 +230,7 @@ export function VehicleDetails() {
           <GlassCard>
             <div className="space-y-4">
               <div>
-                <p className="text-slate-400 text-sm mb-2">Current Status</p>
+                <p className="text-slate-400 text-sm mb-2">{t('vehicleDetails.currentStatus')}</p>
                 <div className="flex flex-wrap gap-2">
                   {['Available', 'In-Use', 'Maintenance'].map((s) => (
                     <Button
@@ -230,7 +240,7 @@ export function VehicleDetails() {
                       className={vehicle.status === s ? 'bg-green-600 hover:bg-green-700' : 'border-white/10 text-slate-400'}
                       onClick={() => handleStatusChange(s)}
                     >
-                      {s}
+                      {t(`vehicleDetails.${s === 'Available' ? 'available' : s === 'In-Use' ? 'inUse' : 'maintenance'}`)}
                     </Button>
                   ))}
                 </div>
@@ -239,19 +249,19 @@ export function VehicleDetails() {
           </GlassCard>
 
           {/* Maintenance */}
-          <GlassCard title="Maintenance">
+          <GlassCard title={t('vehicleDetails.maintenance')}>
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <Wrench className="h-5 w-5 text-blue-400" />
                 <div className="flex-1">
-                  <p className="text-white text-sm">Last Service</p>
+                  <p className="text-white text-sm">{t('vehicleDetails.lastService')}</p>
                   <p className="text-slate-400 text-xs">{vehicle.lastService}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <Calendar className="h-5 w-5 text-orange-400" />
                 <div className="flex-1">
-                  <p className="text-white text-sm">Next Service</p>
+                  <p className="text-white text-sm">{t('vehicleDetails.nextService')}</p>
                   <p className="text-slate-400 text-xs">{vehicle.nextService}</p>
                 </div>
               </div>
@@ -262,11 +272,11 @@ export function VehicleDetails() {
           <div className="space-y-2">
             <Button className="w-full bg-blue-600 hover:bg-blue-700">
               <MapPin className="h-4 w-4 mr-2" />
-              View on Map
+              {t('vehicleDetails.viewOnMap')}
             </Button>
             <Button variant="outline" className="w-full border-white/10 text-white">
               <FileText className="h-4 w-4 mr-2" />
-              View All Reports
+              {t('vehicleDetails.viewAllReports')}
             </Button>
           </div>
         </div>

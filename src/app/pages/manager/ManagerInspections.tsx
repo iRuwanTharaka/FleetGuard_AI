@@ -1,4 +1,13 @@
+/**
+ * @module     Admin Frontend
+ * @author     Bethmi Jayamila <bethmij@gmail.com>
+ * @description This file is part of the Admin/Manager Frontend of FleetGuard AI.
+ *              All dashboard and manager pages are developed by Bethmi Jayamila.
+ * @date       2026-03-06
+ */
+
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
@@ -10,6 +19,7 @@ import { SkeletonLoader } from '@/app/components/common/SkeletonLoader';
 import managerService from '@/services/managerService';
 
 export function ManagerInspections() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { inspections, pagination, loading, fetch } = useInspectionsList();
   const [summary, setSummary] = useState<{ month_count?: number; avg_health?: number; damage_alerts?: number }>({});
@@ -65,8 +75,8 @@ export function ManagerInspections() {
               <div className="absolute inset-0 bg-gradient-to-b from-slate-200/60 via-slate-100/80 to-slate-50 dark:from-slate-900/70 dark:via-slate-900/80 dark:to-slate-950"></div>
             </div>
             <div className="relative h-full flex flex-col justify-end px-6 sm:px-8 pb-6">
-              <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 tracking-tight">Inspections</h1>
-              <p className="text-slate-700 dark:text-slate-300">Monitor and review all vehicle inspections</p>
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 tracking-tight">{t('managerInspections.title')}</h1>
+              <p className="text-slate-700 dark:text-slate-300">{t('managerInspections.subtitle')}</p>
             </div>
           </div>
         </div>
@@ -82,7 +92,7 @@ export function ManagerInspections() {
               }`}
               onClick={() => setActiveTab('all')}
             >
-              All
+              {t('managerInspections.all')}
             </Button>
             <Button
               className={`${
@@ -92,7 +102,7 @@ export function ManagerInspections() {
               }`}
               onClick={() => setActiveTab('pending')}
             >
-              Pending
+              {t('managerInspections.pending')}
             </Button>
             <Button
               className={`${
@@ -102,33 +112,33 @@ export function ManagerInspections() {
               }`}
               onClick={() => setActiveTab('completed')}
             >
-              Completed
+              {t('managerInspections.completed')}
             </Button>
           </div>
           <Button className="bg-blue-600 hover:bg-blue-700">
             <Download className="h-4 w-4 mr-2" />
-            Export
+            {t('managerInspections.export')}
           </Button>
         </div>
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <SummaryCard
-            title="This Month"
+            title={t('managerInspections.thisMonth')}
             value={String(summary.month_count ?? '—')}
-            change="Last 30 days"
+            change={t('managerInspections.last30Days')}
             icon={<FileText className="h-5 w-5" />}
           />
           <SummaryCard
-            title="Avg Health Score"
+            title={t('managerInspections.avgHealth')}
             value={`${summary.avg_health ?? '—'}/100`}
-            change="Completed inspections"
+            change={t('managerInspections.completedInspections')}
             icon={<Activity className="h-5 w-5" />}
           />
           <SummaryCard
-            title="Damage Alerts"
+            title={t('managerInspections.damageAlerts')}
             value={String(summary.damage_alerts ?? '—')}
-            change="Needs attention"
+            change={t('managerInspections.needsAttention')}
             icon={<Calendar className="h-5 w-5" />}
             warning
           />
@@ -142,7 +152,7 @@ export function ManagerInspections() {
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-600 dark:text-slate-400" />
                 <Input
-                  placeholder="Search by vehicle, customer, inspector..."
+                  placeholder={t('managerInspections.searchPlaceholder')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 bg-slate-200/30 dark:bg-white/5 border-slate-300/50 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-500"
@@ -150,7 +160,7 @@ export function ManagerInspections() {
               </div>
               <Button variant="outline" className="border-slate-300/50 dark:border-white/10 text-slate-600 dark:text-slate-400">
                 <Filter className="h-4 w-4 mr-2" />
-                Filters
+                {t('managerInspections.filters')}
               </Button>
             </div>
           </div>
@@ -204,6 +214,8 @@ function InspectionCard({ inspection, delay, onClick }: any) {
                       inspection.health >= 70 ? 'text-slate-600 dark:text-slate-400' : 
                       'text-slate-500';
 
+  const { t } = useTranslation();
+
   return (
     <div
       className="relative rounded-2xl overflow-hidden cursor-pointer animate-fade-in-up"
@@ -222,19 +234,19 @@ function InspectionCard({ inspection, delay, onClick }: any) {
             </div>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <p className="text-slate-500">Vehicle</p>
+                <p className="text-slate-500">{t('managerInspections.vehicle')}</p>
                 <p className="text-slate-900 dark:text-white font-medium">{inspection.vehicleId}</p>
               </div>
               <div className="hidden md:block">
-                <p className="text-slate-500">Customer</p>
+                <p className="text-slate-500">{t('managerInspections.customer')}</p>
                 <p className="text-slate-900 dark:text-white font-medium">{inspection.driverName}</p>
               </div>
               <div className="hidden md:block">
-                <p className="text-slate-500">Inspector</p>
+                <p className="text-slate-500">{t('managerInspections.inspector')}</p>
                 <p className="text-slate-900 dark:text-white font-medium">{inspection.inspector}</p>
               </div>
               <div>
-                <p className="text-slate-500">Date</p>
+                <p className="text-slate-500">{t('managerInspections.date')}</p>
                 <p className="text-slate-900 dark:text-white font-medium">{inspection.date}</p>
               </div>
             </div>
@@ -242,11 +254,11 @@ function InspectionCard({ inspection, delay, onClick }: any) {
           <div className="flex items-center gap-6">
             <div className="text-center">
               <p className={`text-3xl font-bold ${healthColor}`}>{inspection.health}</p>
-              <p className="text-xs text-slate-500">Health</p>
+              <p className="text-xs text-slate-500">{t('managerInspections.health')}</p>
             </div>
             <div className="text-center">
               <p className="text-3xl font-bold text-slate-600 dark:text-slate-400">{inspection.damages}</p>
-              <p className="text-xs text-slate-500">Damages</p>
+              <p className="text-xs text-slate-500">{t('managerInspections.damages')}</p>
             </div>
           </div>
         </div>

@@ -1,3 +1,11 @@
+/**
+ * @module     Admin Frontend
+ * @author     Bethmi Jayamila <bethmij@gmail.com>
+ * @description This file is part of the Admin/Manager Frontend of FleetGuard AI.
+ *              All dashboard and manager pages are developed by Bethmi Jayamila.
+ * @date       2026-03-08
+ */
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Button } from '@/app/components/ui/button';
@@ -21,9 +29,10 @@ import { useTranslation } from 'react-i18next';
 const COLORS = ['#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe', '#38bdf8'];
 
 function SkeletonChart() {
+  const { t } = useTranslation();
   return (
     <div className="h-[300px] flex items-center justify-center bg-slate-200/20 dark:bg-slate-800/20 rounded-lg animate-pulse">
-      <span className="text-slate-500">Loading...</span>
+      <span className="text-slate-500">{t('common.loading')}</span>
     </div>
   );
 }
@@ -81,7 +90,7 @@ export function AnalyticsDashboard() {
                 ))}
                 <Button className="bg-blue-600 hover:bg-blue-700" size="sm">
                   <Download className="h-4 w-4 mr-2" />
-                  Export
+                  {t('analytics.export')}
                 </Button>
               </div>
             </div>
@@ -189,7 +198,7 @@ export function AnalyticsDashboard() {
                     </div>
                     <div className="flex items-center gap-6">
                       <span className="font-bold text-slate-600 dark:text-slate-400">
-                        {v.total_damages} damages
+                        {v.total_damages} {t('analytics.damagesCount')}
                       </span>
                       <span
                         className={`font-bold ${

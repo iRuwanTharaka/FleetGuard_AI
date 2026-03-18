@@ -1,5 +1,14 @@
+/**
+ * @module     Admin Frontend
+ * @author     Bethmi Jayamila <bethmij@gmail.com>
+ * @description This file is part of the Admin/Manager Frontend of FleetGuard AI.
+ *              All dashboard and manager pages are developed by Bethmi Jayamila.
+ * @date       2026-03-10
+ */
+
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import {
   GoogleMap,
   useJsApiLoader,
@@ -21,15 +30,16 @@ function getMarkerColor(lastUpdate: string | null): string {
   return '#94A3B8'; // gray — old
 }
 
-function timeAgo(date: string | null): string {
-  if (!date) return 'Unknown';
+function timeAgo(date: string | null, t: any): string {
+  if (!date) return t('time.unknown');
   const mins = Math.floor((Date.now() - new Date(date).getTime()) / 60000);
-  if (mins < 60) return `${mins} minutes ago`;
-  if (mins < 1440) return `${Math.floor(mins / 60)} hours ago`;
-  return `${Math.floor(mins / 1440)} days ago`;
+  if (mins < 60) return `${mins} ${t('time.minutesAgo')}`;
+  if (mins < 1440) return `${Math.floor(mins / 60)} ${t('time.hoursAgo')}`;
+  return `${Math.floor(mins / 1440)} ${t('time.daysAgo')}`;
 }
 
 export function MapView() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [selectedVehicle, setSelectedVehicle] = useState<any>(null);
@@ -72,12 +82,12 @@ export function MapView() {
     return (
       <div className="space-y-6 pb-6">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-          Fleet Map
+          {t('mapView.title')}
         </h1>
         <div className="rounded-2xl bg-amber-500/20 border border-amber-500/30 p-6 text-amber-700 dark:text-amber-300">
-          <p className="font-medium">Google Maps API key not configured</p>
+          <p className="font-medium">{t('mapView.apiKeyNotConfigured')}</p>
           <p className="text-sm mt-2">
-            Add VITE_GOOGLE_MAPS_API_KEY to your .env file to enable the map view.
+            {t('mapView.apiKeyInstructions')}
           </p>
         </div>
       </div>
@@ -89,10 +99,10 @@ export function MapView() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-            Fleet Map
+            {t('mapView.title')}
           </h1>
           <p className="text-slate-600 dark:text-slate-400 mt-1">
-            Last known vehicle locations
+            {t('mapView.lastKnownLocations')}
           </p>
         </div>
         <div className="flex gap-2">
@@ -101,21 +111,21 @@ export function MapView() {
             size="sm"
             onClick={() => setFilter('all')}
           >
-            All
+            {t('mapView.all')}
           </Button>
           <Button
             variant={filter === 'today' ? 'default' : 'outline'}
             size="sm"
             onClick={() => setFilter('today')}
           >
-            Today
+            {t('mapView.today')}
           </Button>
           <Button
             variant={filter === 'week' ? 'default' : 'outline'}
             size="sm"
             onClick={() => setFilter('week')}
           >
-            Last 7 Days
+            {t('mapView.last7Days')}
           </Button>
           <Button
             variant="outline"
@@ -124,7 +134,7 @@ export function MapView() {
             disabled={loading}
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
+            {t('mapView.refresh')}
           </Button>
         </div>
       </div>
@@ -132,10 +142,10 @@ export function MapView() {
       {/* Stats bar */}
       <div className="flex flex-wrap gap-4 text-sm">
         <span className="text-slate-600 dark:text-slate-400">
-          Total vehicles: <strong className="text-slate-900 dark:text-white">{vehicles.length}</strong>
+          {t('mapView.totalVehicles')}: <strong className="text-slate-900 dark:text-white">{vehicles.length}</strong>
         </span>
         <span className="text-slate-600 dark:text-slate-400">
-          Tracked today: <strong className="text-slate-900 dark:text-white">{trackedToday}</strong>
+          {t('mapView.trackedToday')}: <strong className="text-slate-900 dark:text-white">{trackedToday}</strong>
         </span>
       </div>
 
@@ -143,7 +153,7 @@ export function MapView() {
       <div className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 h-[50vh] min-h-[300px] sm:h-[500px]">
         {loading && (
           <div className="absolute inset-0 flex items-center justify-center bg-slate-200/20 dark:bg-slate-800/20 z-10">
-            <span className="text-slate-500">Loading map...</span>
+            <span className="text-slate-500">{t('mapView.loadingMap')}</span>
           </div>
         )}
         {isLoaded ? (
@@ -194,14 +204,14 @@ export function MapView() {
                     {selectedVehicle.year})
                   </p>
                   <p style={{ fontSize: 13 }}>
-                    Health: <strong>{selectedVehicle.health_score}/100</strong>
+                    {t('mapView.health')}: <strong>{selectedVehicle.health_score}/100</strong>
                   </p>
                   <p style={{ fontSize: 13 }}>
-                    Status: <strong>{selectedVehicle.status}</strong>
+                    {t('mapView.status')}: <strong>{selectedVehicle.status}</strong>
                   </p>
                   <p style={{ fontSize: 13 }}>
-                    Last seen:{' '}
-                    <strong>{timeAgo(selectedVehicle.last_location_update)}</strong>
+                    {t('mapView.lastSeen')}:{' '}
+                    <strong>{timeAgo(selectedVehicle.last_location_update, t)}</strong>
                   </p>
                   <p
                     style={{
@@ -210,7 +220,7 @@ export function MapView() {
                       marginTop: 4,
                     }}
                   >
-                    Last known location only — not real-time tracking
+                    {t('mapView.notRealTime')}
                   </p>
                   <button
                     onClick={() =>
@@ -227,7 +237,7 @@ export function MapView() {
                       fontSize: 13,
                     }}
                   >
-                    View Details
+                    {t('mapView.viewDetails')}
                   </button>
                 </div>
               </InfoWindow>
@@ -241,7 +251,7 @@ export function MapView() {
             <div className="text-center">
               <MapPin className="h-16 w-16 text-slate-400 mx-auto mb-4" />
               <p className="text-slate-600 dark:text-slate-400">
-                Loading map...
+                {t('mapView.loadingMap')}
               </p>
             </div>
           </div>
@@ -251,11 +261,11 @@ export function MapView() {
       {/* Vehicle list below map */}
       <div className="space-y-3">
         <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-          Vehicle List
+          {t('mapView.vehicleList')}
         </h3>
         {vehicles.length === 0 && !loading ? (
           <p className="text-slate-600 dark:text-slate-400">
-            No vehicles with location data
+            {t('mapView.noVehicles')}
           </p>
         ) : (
           vehicles.map((v) => (
@@ -281,6 +291,7 @@ function VehicleListItem({
   isSelected: boolean;
   onClick: () => void;
 }) {
+  const { t } = useTranslation();
   const statusColor =
     vehicle.status === 'available'
       ? 'bg-green-500'
@@ -328,7 +339,7 @@ function VehicleListItem({
             </span>
           </div>
           <span className="text-sm text-slate-600 dark:text-slate-400">
-            {timeAgo(vehicle.last_location_update)}
+            {timeAgo(vehicle.last_location_update, t)}
           </span>
         </div>
       </div>

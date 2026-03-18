@@ -1,4 +1,13 @@
+/**
+ * @module     Admin Frontend
+ * @author     Bethmi Jayamila <bethmij@gmail.com>
+ * @description This file is part of the Admin/Manager Frontend of FleetGuard AI.
+ *              All dashboard and manager pages are developed by Bethmi Jayamila.
+ * @date       2026-03-15
+ */
+
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
@@ -51,6 +60,7 @@ interface NavItem {
   href?: string;
   badge?: string;
   children?: NavItem[];
+  key?: string;
 }
 
 const navigationItems: NavItem[] = [
@@ -58,36 +68,43 @@ const navigationItems: NavItem[] = [
     title: 'Dashboard',
     icon: LayoutDashboard,
     href: '/manager/dashboard',
+    key: 'dashboard',
   },
   {
     title: 'Fleet',
     icon: Car,
+    key: 'fleet',
     children: [
       {
         title: 'All Vehicles',
         icon: Car,
         href: '/manager/fleet',
+        key: 'allVehicles',
       },
       {
         title: 'Add Vehicle',
         icon: Settings,
         href: '/manager/fleet/add',
+        key: 'addVehicle',
       },
     ],
   },
   {
     title: 'Drivers',
     icon: Users,
+    key: 'drivers',
     children: [
       {
         title: 'All Drivers',
         icon: Users,
         href: '/manager/drivers',
+        key: 'allDrivers',
       },
       {
         title: 'Add Driver',
         icon: User,
         href: '/manager/drivers/add',
+        key: 'addDriver',
       },
     ],
   },
@@ -95,41 +112,49 @@ const navigationItems: NavItem[] = [
     title: 'Inspections',
     icon: ClipboardList,
     href: '/manager/inspections',
+    key: 'inspections',
   },
   {
     title: 'Smart Assignment',
     icon: Sparkles,
     href: '/manager/smart-assignment',
     badge: '⭐',
+    key: 'smartAssign',
   },
   {
     title: 'Map View',
     icon: Map,
     href: '/manager/map',
+    key: 'map',
   },
   {
     title: 'Analytics',
     icon: BarChart3,
     href: '/manager/analytics',
+    key: 'analytics',
   },
   {
     title: 'Settings',
     icon: Settings,
+    key: 'settings',
     children: [
       {
         title: 'Profile',
         icon: User,
         href: '/manager/profile',
+        key: 'profile',
       },
       {
         title: 'Preferences',
         icon: Settings,
         href: '/manager/settings',
+        key: 'preferences',
       },
       {
         title: 'Notifications',
         icon: Bell,
         href: '/manager/notifications',
+        key: 'notifications',
       },
     ],
   },
@@ -137,10 +162,12 @@ const navigationItems: NavItem[] = [
     title: 'Help & Support',
     icon: HelpCircle,
     href: '/manager/help',
+    key: 'helpSupport',
   },
 ];
 
 export function ManagerSidebar({ isOpen, onClose }: SidebarProps) {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useCurrentUser();
@@ -271,15 +298,15 @@ export function ManagerSidebar({ isOpen, onClose }: SidebarProps) {
           <div className="mt-4 grid grid-cols-3 gap-2">
             <div className="text-center p-2 rounded-xl bg-white/70 dark:bg-slate-800/70 backdrop-blur-md border border-slate-300/50 dark:border-slate-700/50 shadow-lg hover:shadow-xl transition-all">
               <p className="text-lg font-bold text-blue-600 dark:text-blue-400">{stats.total_vehicles ?? '—'}</p>
-              <p className="text-xs text-slate-600 dark:text-slate-400">Vehicles</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400">{t('managerDashboard.totalVehicles')}</p>
             </div>
             <div className="text-center p-2 rounded-xl bg-white/70 dark:bg-slate-800/70 backdrop-blur-md border border-slate-300/50 dark:border-slate-700/50 shadow-lg hover:shadow-xl transition-all">
               <p className="text-lg font-bold text-green-600 dark:text-green-400">{stats.driver_count ?? '—'}</p>
-              <p className="text-xs text-slate-600 dark:text-slate-400">Drivers</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400">{t('nav.drivers')}</p>
             </div>
             <div className="text-center p-2 rounded-xl bg-white/70 dark:bg-slate-800/70 backdrop-blur-md border border-slate-300/50 dark:border-slate-700/50 shadow-lg hover:shadow-xl transition-all">
               <p className="text-lg font-bold text-amber-600 dark:text-amber-400">{stats.month_inspections ?? '—'}</p>
-              <p className="text-xs text-slate-600 dark:text-slate-400">Month</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400">{t('driverDashboard.thisMonth')}</p>
             </div>
           </div>
         </div>
@@ -321,7 +348,7 @@ export function ManagerSidebar({ isOpen, onClose }: SidebarProps) {
                   >
                     <div className="flex items-center gap-3">
                       <item.icon className="w-5 h-5" />
-                      <span>{item.title}</span>
+                      <span>{item.key ? t(`managerNav.${item.key}`) : item.title}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       {item.badge && <span className="text-xs">{item.badge}</span>}
@@ -348,7 +375,7 @@ export function ManagerSidebar({ isOpen, onClose }: SidebarProps) {
                           )}
                         >
                           <child.icon className="w-4 h-4" />
-                          <span>{child.title}</span>
+                          <span>{child.key ? t(`managerNav.${child.key}`) : child.title}</span>
                         </Link>
                       ))}
                     </div>
@@ -366,7 +393,7 @@ export function ManagerSidebar({ isOpen, onClose }: SidebarProps) {
                   )}
                 >
                   <item.icon className="w-5 h-5" />
-                  <span>{item.title}</span>
+                  <span>{item.key ? t(`managerNav.${item.key}`) : item.title}</span>
                   {item.badge && <span className="ml-auto text-xs">{item.badge}</span>}
                 </Link>
               )}

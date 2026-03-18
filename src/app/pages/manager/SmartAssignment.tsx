@@ -1,5 +1,14 @@
+/**
+ * @module     Admin Frontend
+ * @author     Bethmi Jayamila <bethmij@gmail.com>
+ * @description This file is part of the Admin/Manager Frontend of FleetGuard AI.
+ *              All dashboard and manager pages are developed by Bethmi Jayamila.
+ * @date       2026-03-11
+ */
+
 import { useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
 import { Label } from '@/app/components/ui/label';
@@ -28,6 +37,7 @@ const CITY_COORDS: Record<string, { lat: number; lng: number }> = {
 };
 
 export function SmartAssignment() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [customerTier, setCustomerTier] = useState<'VIP' | 'Standard' | 'Budget'>('Standard');
   const [pickupAddress, setPickupAddress] = useState('');
@@ -130,13 +140,13 @@ export function SmartAssignment() {
       <div className="text-center mb-8">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-600 dark:text-blue-300 mb-4">
           <Sparkles className="h-4 w-4" />
-          <span className="text-sm font-medium">AI-Powered</span>
+          <span className="text-sm font-medium">{t('smartAssignment.aiPowered')}</span>
         </div>
         <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">
-          Smart Vehicle Assignment
+          {t('smartAssignment.title')}
         </h1>
         <p className="text-slate-600 dark:text-slate-400">
-          AI recommends the best vehicles based on health, location, and customer tier
+          {t('smartAssignment.description')}
         </p>
       </div>
 
@@ -146,12 +156,12 @@ export function SmartAssignment() {
           <div className="absolute inset-0 bg-white/60 dark:bg-white/5 backdrop-blur-md border border-slate-300/50 dark:border-white/10"></div>
           <div className="relative p-6">
             <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6">
-              Get Recommendations
+              {t('smartAssignment.getRecommendations')}
             </h2>
             <div className="space-y-4">
               <div>
                 <Label htmlFor="customerTier" className="text-slate-700 dark:text-slate-300">
-                  Customer Tier *
+                  {t('smartAssignment.customerTier')}
                 </Label>
                 <Select
                   value={customerTier}
@@ -169,18 +179,18 @@ export function SmartAssignment() {
               </div>
               <div>
                 <Label htmlFor="pickupLocation" className="text-slate-700 dark:text-slate-300">
-                  Pickup Location *
+                  {t('smartAssignment.pickupLocation')}
                 </Label>
                 <Input
                   id="pickupLocation"
-                  placeholder="e.g. Colombo Fort or 6.9271, 79.8612"
+                  placeholder={t('smartAssignment.locationPlaceholder')}
                   value={pickupAddress}
                   onChange={(e) => handleAddressChange(e.target.value)}
                   className="mt-2 bg-slate-200/30 dark:bg-white/5 border-slate-300/50 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-500"
                 />
                 {pickupLat && pickupLng && (
                   <p className="text-xs text-green-600 dark:text-green-400 mt-1">
-                    Location found: {pickupLat.toFixed(4)}, {pickupLng.toFixed(4)}
+                    {t('smartAssignment.locationFound')}: {pickupLat.toFixed(4)}, {pickupLng.toFixed(4)}
                   </p>
                 )}
               </div>
@@ -195,12 +205,12 @@ export function SmartAssignment() {
                 {loading ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Getting Recommendations...
+                    {t('smartAssignment.gettingRecommendations')}
                   </>
                 ) : (
                   <>
                     <Sparkles className="h-4 w-4 mr-2" />
-                    Get Recommendations
+                    {t('smartAssignment.getRecommendations')}
                   </>
                 )}
               </Button>
@@ -223,7 +233,7 @@ export function SmartAssignment() {
                 <div className="absolute inset-0 bg-white/60 dark:bg-white/5 backdrop-blur-md border border-slate-300/50 dark:border-white/10"></div>
                 <div className="relative p-6">
                   <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6">
-                    AI Recommendations
+                    {t('smartAssignment.aiRecommendations')}
                   </h2>
                   <div className="space-y-4">
                     {recommendations.map((rec) => (
@@ -241,7 +251,7 @@ export function SmartAssignment() {
                 <div className="absolute inset-0 bg-white/60 dark:bg-white/5 backdrop-blur-md border border-slate-300/50 dark:border-white/10"></div>
                 <div className="relative p-6 h-full flex flex-col items-center justify-center text-center min-h-[200px]">
                   <p className="text-slate-600 dark:text-slate-400">
-                    No available vehicles with location data found.
+                    {t('smartAssignment.noVehicles')}
                   </p>
                 </div>
               </div>
@@ -252,10 +262,10 @@ export function SmartAssignment() {
               <div className="relative p-6 h-full flex flex-col items-center justify-center text-center min-h-[200px]">
                 <Sparkles className="h-16 w-16 text-blue-600 dark:text-blue-400 mb-4" />
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
-                  Ready to Find the Best Match
+                  {t('smartAssignment.readyToFind')}
                 </h3>
                 <p className="text-slate-600 dark:text-slate-400">
-                  Enter pickup location and customer tier to get AI-powered vehicle recommendations
+                  {t('smartAssignment.enterDetails')}
                 </p>
               </div>
             </div>
@@ -273,6 +283,7 @@ function RecommendationCard({
   recommendation: any;
   onAssign: () => void;
 }) {
+  const { t } = useTranslation();
   const getBadgeColor = (rank: number) => {
     if (rank === 1) return 'bg-blue-500/20 border-blue-500/30 text-blue-600 dark:text-blue-300';
     if (rank === 2) return 'bg-slate-200/50 dark:bg-white/10 border-slate-300/50 dark:border-white/20 text-slate-900 dark:text-white';
@@ -292,10 +303,10 @@ function RecommendationCard({
             >
               #{recommendation.rank}{' '}
               {recommendation.rank === 1
-                ? 'Best Match'
+                ? t('smartAssignment.bestMatch')
                 : recommendation.rank === 2
-                ? 'Good Match'
-                : 'Alternative'}
+                ? t('smartAssignment.goodMatch')
+                : t('smartAssignment.alternative')}
             </span>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
               {recommendation.vehicle_number}
@@ -308,7 +319,7 @@ function RecommendationCard({
             <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
               {recommendation.total_score}
             </p>
-            <p className="text-xs text-slate-500">Score</p>
+            <p className="text-xs text-slate-500">{t('smartAssignment.score')}</p>
           </div>
         </div>
 
@@ -316,7 +327,7 @@ function RecommendationCard({
           <div className="flex items-center gap-2">
             <Activity className="h-4 w-4 text-blue-600 dark:text-blue-400" />
             <div>
-              <p className="text-xs text-slate-500">Health</p>
+              <p className="text-xs text-slate-500">{t('smartAssignment.health')}</p>
               <p className="text-sm font-bold text-slate-900 dark:text-white">
                 {recommendation.health_score}
               </p>
@@ -325,7 +336,7 @@ function RecommendationCard({
           <div className="flex items-center gap-2">
             <MapPin className="h-4 w-4 text-blue-600 dark:text-blue-400" />
             <div>
-              <p className="text-xs text-slate-500">Distance</p>
+              <p className="text-xs text-slate-500">{t('smartAssignment.distance')}</p>
               <p className="text-sm font-bold text-slate-900 dark:text-white">
                 {recommendation.distance_km} km
               </p>
@@ -334,7 +345,7 @@ function RecommendationCard({
           <div className="flex items-center gap-2">
             <Star className="h-4 w-4 text-slate-600 dark:text-slate-400" />
             <div>
-              <p className="text-xs text-slate-500">Tier</p>
+              <p className="text-xs text-slate-500">{t('smartAssignment.tier')}</p>
               <p className="text-sm font-bold text-slate-900 dark:text-white">
                 {recommendation.score_breakdown?.tier_points ?? 0} pts
               </p>
@@ -354,7 +365,7 @@ function RecommendationCard({
           onClick={onAssign}
           className="w-full bg-blue-600 hover:bg-blue-700"
         >
-          Assign This Vehicle
+          {t('smartAssignment.assignVehicle')}
           <ArrowRight className="h-4 w-4 ml-2" />
         </Button>
       </div>

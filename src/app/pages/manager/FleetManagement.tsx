@@ -1,4 +1,13 @@
+/**
+ * @module     Admin Frontend
+ * @author     Bethmi Jayamila <bethmij@gmail.com>
+ * @description This file is part of the Admin/Manager Frontend of FleetGuard AI.
+ *              All dashboard and manager pages are developed by Bethmi Jayamila.
+ * @date       2026-03-01
+ */
+
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
@@ -24,6 +33,7 @@ const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1758179128122-6079c
 const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:3001/api').replace(/\/api\/?$/, '');
 
 export function FleetManagement() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
@@ -101,15 +111,15 @@ export function FleetManagement() {
             </div>
             <div className="relative h-full flex items-center justify-between px-6 sm:px-8">
               <div>
-                <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 tracking-tight">Fleet Management</h1>
-                <p className="text-slate-700 dark:text-slate-300">Manage all {vehicles.length} vehicles</p>
+                <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 tracking-tight">{t('fleetManagement.title')}</h1>
+                <p className="text-slate-700 dark:text-slate-300">{t('fleetManagement.manageAll', { count: vehicles.length })}</p>
               </div>
               <Button 
                 onClick={() => navigate('/manager/fleet/add')}
                 className="bg-blue-600 hover:bg-blue-700"
               >
                 <Plus className="h-4 w-4 mr-2" />
-                Add Vehicle
+                {t('fleetManagement.addVehicle')}
               </Button>
             </div>
           </div>
@@ -124,7 +134,7 @@ export function FleetManagement() {
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-600 dark:text-slate-400" />
                 <Input
-                  placeholder="Search vehicles..."
+                  placeholder={t('fleetManagement.search')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 bg-slate-200/30 dark:bg-white/5 border-slate-300/50 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-500"
@@ -149,17 +159,17 @@ export function FleetManagement() {
                 >
                   <List className="h-4 w-4" />
                 </Button>
-                <Button 
+                 <Button 
                   variant="outline" 
                   className={`border-slate-300/50 dark:border-white/10 ${showFilters ? 'bg-slate-200/50 dark:bg-white/10 text-slate-900 dark:text-white' : 'text-slate-600 dark:text-slate-400'}`}
                   onClick={() => setShowFilters(!showFilters)}
                 >
                   <Filter className="h-4 w-4 mr-2" />
-                  Filters
+                  {t('fleetManagement.filters')}
                 </Button>
                 <Button variant="outline" className="border-slate-300/50 dark:border-white/10 text-slate-600 dark:text-slate-400">
                   <Download className="h-4 w-4 mr-2" />
-                  Export
+                  {t('fleetManagement.export')}
                 </Button>
               </div>
             </div>
@@ -170,7 +180,7 @@ export function FleetManagement() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Status Filter */}
                   <div>
-                    <label className="text-sm text-slate-600 dark:text-slate-400 mb-2 block">Status</label>
+                    <label className="text-sm text-slate-600 dark:text-slate-400 mb-2 block">{t('fleetManagement.status')}</label>
                     <div className="flex flex-wrap gap-2">
                       {statuses.map((status) => (
                         <Button
@@ -184,7 +194,7 @@ export function FleetManagement() {
                               : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200/30 dark:hover:bg-white/5'
                           }`}
                         >
-                          {status === 'all' ? 'All Statuses' : status}
+                          {status === 'all' ? t('fleetManagement.allStatuses') : status}
                         </Button>
                       ))}
                     </div>
@@ -192,7 +202,7 @@ export function FleetManagement() {
 
                   {/* Type Filter */}
                   <div>
-                    <label className="text-sm text-slate-600 dark:text-slate-400 mb-2 block">Type</label>
+                    <label className="text-sm text-slate-600 dark:text-slate-400 mb-2 block">{t('fleetManagement.type')}</label>
                     <div className="flex flex-wrap gap-2">
                       {types.map((type) => (
                         <Button
@@ -206,7 +216,7 @@ export function FleetManagement() {
                               : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200/30 dark:hover:bg-white/5'
                           }`}
                         >
-                          {type === 'all' ? 'All Types' : type}
+                          {type === 'all' ? t('fleetManagement.allTypes') : type}
                         </Button>
                       ))}
                     </div>
@@ -216,7 +226,7 @@ export function FleetManagement() {
                 {/* Active Filters */}
                 {(statusFilter !== 'all' || typeFilter !== 'all') && (
                   <div className="flex items-center gap-2 pt-2">
-                    <span className="text-sm text-slate-600 dark:text-slate-400">Active filters:</span>
+                    <span className="text-sm text-slate-600 dark:text-slate-400">{t('fleetManagement.activeFilters')}</span>
                     {statusFilter !== 'all' && (
                       <span className="px-3 py-1 rounded-lg text-xs bg-blue-500/20 border border-blue-500/30 text-blue-600 dark:text-blue-300 flex items-center gap-2">
                         Status: {statusFilter}
@@ -244,7 +254,7 @@ export function FleetManagement() {
                       }}
                       className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-xs"
                     >
-                      Clear all
+                      {t('fleetManagement.clearAll')}
                     </Button>
                   </div>
                 )}
@@ -255,7 +265,7 @@ export function FleetManagement() {
 
         {/* Results Count */}
         <div className="text-slate-600 dark:text-slate-400 text-sm">
-          Showing {filteredVehicles.length} of {vehicles.length} vehicles
+          {t('fleetManagement.showing', { count: filteredVehicles.length, total: vehicles.length })}
         </div>
 
         {/* Vehicle Grid */}
@@ -271,8 +281,8 @@ export function FleetManagement() {
           ) : (
             <div className="col-span-full text-center py-12">
               <Car className="h-16 w-16 text-slate-400 dark:text-slate-600 mx-auto mb-4" />
-              <p className="text-slate-600 dark:text-slate-400 text-lg">No vehicles found</p>
-              <p className="text-slate-500 text-sm mt-2">Try adjusting your filters or search query</p>
+              <p className="text-slate-600 dark:text-slate-400 text-lg">{t('fleetManagement.noVehicles')}</p>
+              <p className="text-slate-500 text-sm mt-2">{t('fleetManagement.noVehiclesDesc')}</p>
             </div>
           )}
         </div>
@@ -282,6 +292,7 @@ export function FleetManagement() {
 }
 
 function VehicleCard({ vehicle, delay, onClick }: any) {
+  const { t } = useTranslation();
   const statusColor = vehicle.status === 'Available' ? 'bg-blue-500/20 border-blue-500/30 text-blue-600 dark:text-blue-300' :
                       vehicle.status === 'In-Use' ? 'bg-slate-200/50 dark:bg-white/10 border-slate-300/50 dark:border-white/20 text-slate-900 dark:text-white' :
                       'bg-slate-300/30 dark:bg-slate-500/20 border-slate-400/50 dark:border-slate-500/30 text-slate-700 dark:text-slate-300';
@@ -325,7 +336,7 @@ function VehicleCard({ vehicle, delay, onClick }: any) {
         <div className="space-y-3">
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-xs text-slate-500 mb-1">Vehicle ID</p>
+              <p className="text-xs text-slate-500 mb-1">{t('fleetManagement.vehicleId')}</p>
               <h3 className="text-lg font-bold text-slate-900 dark:text-white">{vehicle.number_plate ?? vehicle.id}</h3>
             </div>
             <span className={`px-3 py-1 rounded-lg text-xs font-medium backdrop-blur-md border ${statusColor}`}>
@@ -342,11 +353,11 @@ function VehicleCard({ vehicle, delay, onClick }: any) {
 
           <div className="flex items-center justify-between pt-3 border-t border-slate-300/50 dark:border-white/10">
             <div className="hidden md:block">
-              <p className="text-xs text-slate-500 mb-1">Health Score</p>
+              <p className="text-xs text-slate-500 mb-1">{t('fleetManagement.healthScore')}</p>
               <p className={`text-2xl font-bold ${healthColor}`}>{vehicle.health}%</p>
             </div>
             <div className="text-right hidden md:block">
-              <p className="text-xs text-slate-500 mb-1">Last Inspection</p>
+              <p className="text-xs text-slate-500 mb-1">{t('fleetManagement.lastInspection')}</p>
               <div className="flex items-center gap-1 text-slate-600 dark:text-slate-400">
                 <Calendar className="h-3 w-3" />
                 <span className="text-xs">{vehicle.lastInspection}</span>

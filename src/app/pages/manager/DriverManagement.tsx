@@ -1,4 +1,13 @@
+/**
+ * @module     Admin Frontend
+ * @author     Bethmi Jayamila <bethmij@gmail.com>
+ * @description This file is part of the Admin/Manager Frontend of FleetGuard AI.
+ *              All dashboard and manager pages are developed by Bethmi Jayamila.
+ * @date       2026-03-03
+ */
+
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
 import { Search, Plus, User, Phone, Mail, Calendar, Star, Car, TrendingUp, Award, MoreVertical, Edit, Trash2, Eye } from 'lucide-react';
@@ -11,6 +20,7 @@ import { toast } from 'sonner';
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 export function DriverManagement() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -29,13 +39,13 @@ export function DriverManagement() {
   }, []);
 
   const handleRemoveDriver = async (driverId: string) => {
-    if (!window.confirm('Are you sure you want to remove this driver? They will no longer be able to log in.')) return;
+    if (!window.confirm(t('driverManagement.confirmRemove'))) return;
     try {
       await usersService.deleteDriver(driverId);
-      toast.success('Driver removed');
+      toast.success(t('driverManagement.removeSuccess'));
       fetchDrivers();
     } catch (err: any) {
-      toast.error(err.response?.data?.error || 'Failed to remove driver');
+      toast.error(err.response?.data?.error || t('driverManagement.removeError'));
     }
   };
 
@@ -80,37 +90,37 @@ export function DriverManagement() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Driver Management</h1>
-          <p className="text-slate-600 dark:text-slate-400 mt-1">Manage your fleet drivers</p>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{t('driverManagement.title')}</h1>
+          <p className="text-slate-600 dark:text-slate-400 mt-1">{t('driverManagement.subtitle')}</p>
         </div>
         <Button onClick={() => navigate('/manager/drivers/add')} className="bg-blue-600 hover:bg-blue-700">
           <Plus className="h-4 w-4 mr-2" />
-          Add New Driver
+          {t('driverManagement.addNew')}
         </Button>
       </div>
 
       {/* Statistics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
-          title="Total Drivers"
+          title={t('driverManagement.totalDrivers')}
           value={stats.totalDrivers}
           icon={<User className="h-5 w-5" />}
           color="blue"
         />
         <StatCard
-          title="Active Drivers"
+          title={t('driverManagement.activeDrivers')}
           value={stats.activeDrivers}
           icon={<TrendingUp className="h-5 w-5" />}
           color="green"
         />
         <StatCard
-          title="Average Rating"
+          title={t('driverManagement.avgRating')}
           value={stats.avgRating}
           icon={<Star className="h-5 w-5" />}
           color="yellow"
         />
         <StatCard
-          title="Total Trips"
+          title={t('driverManagement.totalTrips')}
           value={stats.totalTrips}
           icon={<Car className="h-5 w-5" />}
           color="purple"
@@ -126,7 +136,7 @@ export function DriverManagement() {
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-600 dark:text-slate-400" />
               <Input
-                placeholder="Search drivers by name or ID..."
+                placeholder={t('driverManagement.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10 bg-slate-200/30 dark:bg-white/5 border-slate-300/50 dark:border-white/10 text-slate-900 dark:text-white"
@@ -136,19 +146,19 @@ export function DriverManagement() {
             {/* Status Filter */}
             <div className="flex gap-2">
               <FilterButton
-                label="All"
+                label={t('driverManagement.all')}
                 active={filterStatus === 'all'}
                 onClick={() => setFilterStatus('all')}
                 count={drivers.length}
               />
               <FilterButton
-                label="Active"
+                label={t('driverManagement.active')}
                 active={filterStatus === 'active'}
                 onClick={() => setFilterStatus('active')}
                 count={drivers.filter(d => d.status === 'Active').length}
               />
               <FilterButton
-                label="On Leave"
+                label={t('driverManagement.onLeave')}
                 active={filterStatus === 'on leave'}
                 onClick={() => setFilterStatus('on leave')}
                 count={drivers.filter(d => d.status === 'On Leave').length}
@@ -170,8 +180,8 @@ export function DriverManagement() {
           <div className="absolute inset-0 bg-white/60 dark:bg-white/5 backdrop-blur-md border border-slate-300/50 dark:border-white/10"></div>
           <div className="relative p-12 text-center">
             <User className="h-16 w-16 text-slate-400 mx-auto mb-4" />
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">No Drivers Found</h3>
-            <p className="text-slate-600 dark:text-slate-400">Try adjusting your search or filters</p>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{t('driverManagement.noDrivers')}</h3>
+            <p className="text-slate-600 dark:text-slate-400">{t('driverManagement.noDriversSubtitle')}</p>
           </div>
         </div>
       )}
@@ -220,6 +230,7 @@ function FilterButton({ label, active, onClick, count }: any) {
 
 function DriverCard({ driver, onRemove }: { driver: any; onRemove?: (id: string) => void }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [showMenu, setShowMenu] = useState(false);
 
   const statusColor = driver.status === 'Active' 
@@ -256,13 +267,13 @@ function DriverCard({ driver, onRemove }: { driver: any; onRemove?: (id: string)
             {showMenu && (
               <div className="absolute right-0 top-10 w-40 bg-white dark:bg-slate-800 border border-slate-300 dark:border-white/10 rounded-lg shadow-lg z-10">
                 <button onClick={() => { navigate(`/manager/drivers/${driver.id}`); setShowMenu(false); }} className="w-full px-4 py-2 text-left text-sm text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2">
-                  <Eye className="h-4 w-4" /> View Details
+                  <Eye className="h-4 w-4" /> {t('driverManagement.viewDetails')}
                 </button>
                 <button onClick={() => { navigate(`/manager/drivers/${driver.id}/edit`); setShowMenu(false); }} className="w-full px-4 py-2 text-left text-sm text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2">
-                  <Edit className="h-4 w-4" /> Edit
+                  <Edit className="h-4 w-4" /> {t('driverManagement.edit')}
                 </button>
                 <button onClick={() => { onRemove?.(driver.id); setShowMenu(false); }} className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2">
-                  <Trash2 className="h-4 w-4" /> Remove
+                  <Trash2 className="h-4 w-4" /> {t('driverManagement.remove')}
                 </button>
               </div>
             )}
@@ -288,7 +299,7 @@ function DriverCard({ driver, onRemove }: { driver: any; onRemove?: (id: string)
           </div>
           <div className="flex items-center gap-2 text-sm">
             <Car className="h-4 w-4 text-slate-600 dark:text-slate-400" />
-            <span className="text-slate-900 dark:text-white">Vehicle: {driver.vehicle}</span>
+            <span className="text-slate-900 dark:text-white">{t('driverManagement.vehicle')}: {driver.vehicle}</span>
           </div>
         </div>
 
@@ -299,15 +310,15 @@ function DriverCard({ driver, onRemove }: { driver: any; onRemove?: (id: string)
               <Star className="h-3 w-3 text-yellow-500 fill-yellow-500" />
               <p className="text-lg font-bold text-slate-900 dark:text-white">{driver.rating}</p>
             </div>
-            <p className="text-xs text-slate-600 dark:text-slate-400">Rating</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400">{t('driverManagement.rating')}</p>
           </div>
           <div className="text-center">
             <p className="text-lg font-bold text-slate-900 dark:text-white">{driver.totalTrips}</p>
-            <p className="text-xs text-slate-600 dark:text-slate-400">Trips</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400">{t('driverManagement.trips')}</p>
           </div>
           <div className="text-center">
             <p className="text-sm font-bold text-slate-900 dark:text-white">{driver.joinDate}</p>
-            <p className="text-xs text-slate-600 dark:text-slate-400">Joined</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400">{t('driverManagement.joined')}</p>
           </div>
         </div>
 
@@ -316,7 +327,7 @@ function DriverCard({ driver, onRemove }: { driver: any; onRemove?: (id: string)
           onClick={() => navigate(`/manager/drivers/${driver.id}`)}
           className="w-full mt-4 bg-blue-600 hover:bg-blue-700"
         >
-          View Profile
+          {t('driverManagement.viewProfile')}
         </Button>
       </div>
     </div>

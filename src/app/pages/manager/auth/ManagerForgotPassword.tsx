@@ -1,3 +1,11 @@
+/**
+ * @module     Admin Frontend
+ * @author     Bethmi Jayamila <bethmij@gmail.com>
+ * @description This file is part of the Admin/Manager Frontend of FleetGuard AI.
+ *              All dashboard and manager pages are developed by Bethmi Jayamila.
+ * @date       2026-02-16
+ */
+
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { Button } from '@/app/components/ui/button';

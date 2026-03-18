@@ -1,4 +1,13 @@
+/**
+ * @module     Admin Frontend
+ * @author     Bethmi Jayamila <bethmij@gmail.com>
+ * @description This file is part of the Admin/Manager Frontend of FleetGuard AI.
+ *              All dashboard and manager pages are developed by Bethmi Jayamila.
+ * @date       2026-02-18
+ */
+
 import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/app/components/ui/button';
 import { Car, FileText, AlertTriangle, Activity, ArrowRight, TrendingUp } from 'lucide-react';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
@@ -8,6 +17,7 @@ import { useManagerDashboard } from '@/hooks/useManagerDashboard';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 
 export function ManagerDashboard() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useCurrentUser();
   const { stats, healthDist, alerts, activity, loading, error, refresh } = useManagerDashboard();
@@ -66,17 +76,17 @@ export function ManagerDashboard() {
                 </div>
               </div>
               
-              <div className="flex-1 pb-2">
+               <div className="flex-1 pb-2">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="px-3 py-1.5 rounded-lg text-xs font-medium bg-white/50 dark:bg-white/10 backdrop-blur-md border border-slate-300/50 dark:border-white/20 text-slate-900 dark:text-white">
-                    Fleet Manager
+                    {t('managerDashboard.badge')}
                   </span>
                 </div>
                 <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-2 tracking-tight">
-                  Welcome back, {user?.name?.split(' ')[0] || 'Manager'}
+                  {t('managerDashboard.welcome')}, {user?.name?.split(' ')[0] || 'Manager'}
                 </h1>
                 <p className="text-slate-700 dark:text-slate-300 text-lg">
-                  Managing {loading ? '…' : (stats?.total_vehicles ?? '0')} vehicles across the fleet
+                  {t('managerDashboard.managing')} {loading ? '…' : (stats?.total_vehicles ?? '0')} {t('managerDashboard.vehicles')}
                 </p>
               </div>
             </div>
@@ -103,8 +113,8 @@ export function ManagerDashboard() {
               <div className="absolute top-0 right-0 w-32 h-32 opacity-5 dark:opacity-10">
                 <Car className="w-full h-full" />
               </div>
-              <div className="relative">
-                <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">Total Vehicles</p>
+               <div className="relative">
+                <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">{t('managerDashboard.totalVehicles')}</p>
                 <p className="text-4xl font-bold text-slate-900 dark:text-white mb-1 counter-animate">{stats?.total_vehicles ?? '0'}</p>
                 <p className="text-xs text-blue-600 dark:text-blue-400">+3 this month</p>
               </div>
@@ -116,8 +126,8 @@ export function ManagerDashboard() {
               <div className="absolute top-0 right-0 w-32 h-32 opacity-5 dark:opacity-10">
                 <Activity className="w-full h-full" />
               </div>
-              <div className="relative">
-                <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">Available Now</p>
+               <div className="relative">
+                <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">{t('managerDashboard.available')}</p>
                 <p className="text-4xl font-bold text-slate-900 dark:text-white mb-1">{stats?.available ?? '0'}</p>
                 <p className="text-xs text-blue-600 dark:text-blue-400">68% of fleet</p>
               </div>
@@ -129,8 +139,8 @@ export function ManagerDashboard() {
               <div className="absolute top-0 right-0 w-32 h-32 opacity-5 dark:opacity-10">
                 <FileText className="w-full h-full" />
               </div>
-              <div className="relative">
-                <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">Inspections</p>
+               <div className="relative">
+                <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">{t('managerDashboard.inspections')}</p>
                 <p className="text-4xl font-bold text-slate-900 dark:text-white mb-1">{stats?.today_inspections ?? '0'}</p>
                 <p className="text-xs text-blue-600 dark:text-blue-400">Today</p>
               </div>
@@ -142,8 +152,8 @@ export function ManagerDashboard() {
               <div className="absolute top-0 right-0 w-32 h-32 opacity-5 dark:opacity-10">
                 <AlertTriangle className="w-full h-full" />
               </div>
-              <div className="relative">
-                <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">Needs Attention</p>
+               <div className="relative">
+                <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">{t('managerDashboard.needsAttention')}</p>
                 <p className="text-4xl font-bold text-slate-900 dark:text-white mb-1">{stats?.pending_reviews ?? '0'}</p>
                 <p className="text-xs text-slate-500">Pending review</p>
               </div>
@@ -154,21 +164,21 @@ export function ManagerDashboard() {
         </div>
 
         {/* Fleet Health Distribution */}
-        <GlassCard delay={400}>
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Fleet Health Overview</h2>
+         <GlassCard delay={400}>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6">{t('managerDashboard.fleetHealth')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 rounded-xl bg-slate-200/30 dark:bg-white/5 border border-slate-300/50 dark:border-white/10">
-              <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">Excellent (80-100)</p>
+             <div className="p-4 rounded-xl bg-slate-200/30 dark:bg-white/5 border border-slate-300/50 dark:border-white/10">
+              <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">{t('managerDashboard.excellent')}</p>
               <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{loading ? '—' : (healthDist?.excellent?.count ?? '0')}</p>
               <p className="text-xs text-slate-500">Good health</p>
             </div>
             <div className="p-4 rounded-xl bg-slate-200/30 dark:bg-white/5 border border-slate-300/50 dark:border-white/10">
-              <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">Good (60-79)</p>
+              <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">{t('managerDashboard.good')}</p>
               <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{loading ? '—' : (healthDist?.good?.count ?? '0')}</p>
               <p className="text-xs text-slate-500">Fair health</p>
             </div>
             <div className="p-4 rounded-xl bg-slate-200/30 dark:bg-white/5 border border-slate-300/50 dark:border-white/10">
-              <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">Needs Service (&lt;60)</p>
+              <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">{t('managerDashboard.needsService')}</p>
               <p className="text-3xl font-bold text-slate-600 dark:text-slate-400">{loading ? '—' : (healthDist?.poor?.count ?? '0')}</p>
               <p className="text-xs text-slate-500">Needs attention</p>
             </div>
@@ -178,9 +188,9 @@ export function ManagerDashboard() {
         {/* Recent Damage Alerts */}
         <GlassCard delay={500}>
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Recent Damage Alerts</h2>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">{t('managerDashboard.recentAlerts')}</h2>
             <Button variant="ghost" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300" onClick={() => navigate('/manager/inspections')}>
-              View All
+              {t('managerDashboard.viewAll')}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
@@ -205,13 +215,13 @@ export function ManagerDashboard() {
         </GlassCard>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Button 
             className="h-16 bg-blue-600 hover:bg-blue-700 text-white" 
             onClick={() => navigate('/manager/fleet/add')}
           >
             <Car className="mr-2 h-5 w-5" />
-            Add New Vehicle
+            {t('managerDashboard.addNew')}
           </Button>
           <Button 
             className="h-16 bg-slate-200/50 dark:bg-white/10 hover:bg-slate-200/80 dark:hover:bg-white/20 text-slate-900 dark:text-white border border-slate-300/50 dark:border-white/20" 
@@ -219,7 +229,7 @@ export function ManagerDashboard() {
             onClick={() => navigate('/manager/inspections')}
           >
             <FileText className="mr-2 h-5 w-5" />
-            View All Inspections
+            {t('managerDashboard.viewAllInspections')}
           </Button>
           <Button 
             className="h-16 bg-slate-200/50 dark:bg-white/10 hover:bg-slate-200/80 dark:hover:bg-white/20 text-slate-900 dark:text-white border border-slate-300/50 dark:border-white/20" 
@@ -227,7 +237,7 @@ export function ManagerDashboard() {
             onClick={() => navigate('/manager/smart-assignment')}
           >
             <TrendingUp className="mr-2 h-5 w-5" />
-            Smart Assignment
+            {t('managerDashboard.smartAssign')}
           </Button>
         </div>
       </div>
