@@ -1,0 +1,20 @@
+{
+  "name": "fleetguard-ai-service",
+  "version": "1.0.0",
+  "description": "This directory contains the Python-based AI service for FleetGuard's damage detection, using YOLOv8.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@tensorflow/tfjs": "^4.22.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "jpeg-js": "^0.4.4",
+    "multer": "^2.1.1"
+  }
+}

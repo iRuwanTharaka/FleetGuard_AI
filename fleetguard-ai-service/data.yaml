@@ -1,0 +1,12 @@
+path: ./dataset
+train: images/train
+val: images/val
+test: images/test
+
+# Classes. Make sure this matches the dataset downloaded
+names:
+  0: dent
+  1: scratch
+  2: crack
+  3: broken_glass
+  4: structural_damage
